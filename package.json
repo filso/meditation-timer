@@ -2,7 +2,7 @@
   "name": "ionic-project",
   "version": "1.0.0",
   "description": "An Ionic project",
-  "dependencies": {
+  "devDependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^0.7.1",
     "gulp-concat": "^2.2.0",
@@ -18,6 +18,10 @@
     "gulp-size": "~0.3.0",
     "gulp-jshint": "~1.5.3",
     "karma": "~0.12.9",
-    "gulp-karma": "0.0.4"
+    "gulp-karma": "0.0.4",
+    "gulp-plumber": "~0.6.1",
+    "jshint-stylish": "~0.1.5",
+    "gulp-connect": "~2.0.5",
+    "gulp-shell": "~0.2.4"
   }
 }
