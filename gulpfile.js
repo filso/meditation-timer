@@ -17,6 +17,7 @@ var gulp = require('gulp'),
   linker = require('gulp-linker'),
   runSequence = require('run-sequence'),
   shell = require('gulp-shell'),
+  gutil = require('gulp-util'),
   livereload = require('gulp-livereload');
 
 
@@ -44,7 +45,7 @@ var paths = {
  * Development tasks
  */
 gulp.task('develop', ['connect', 'preprocess', 'kill_karma', 'karma', 'watch']);
-gulp.task('preprocess', ['templates', 'all-sass']);
+gulp.task('preprocess', ['jade', 'sass']);
 // The default task (called when you run `gulp` from cli)
 gulp.task('default', ['develop']);
 
@@ -68,15 +69,14 @@ gulp.task('hint', function() {
     .pipe(jshint.reporter(stylish));
 });
 
-gulp.task('templates', ['jade', 'html2js']);
 
 
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
   gulp.watch(paths.scripts, ['hint', 'watchJs']);
-  gulp.watch(paths.templates.html, ['html2js']);
-  gulp.watch(paths.templates.jade, ['templates']);
+  // gulp.watch(paths.templates.html, ['html2js']);
+  gulp.watch(paths.templates.jade, ['jade']);
   gulp.watch(paths.sass, ['sass']);
 });
 
@@ -120,19 +120,9 @@ gulp.task('linker', function() {
 });
 
 
-gulp.task('all-sass', function() {
-  return gulp.src(['./app/styles/main.scss', './app/styles/busuu-bootstrap.scss'])
-    .pipe(sass({
-      outputStyle: "compressed",
-      includePaths: ["./app/styles/bootstrap-sass", "./app"]
-    }))
-    .on('error', gutil.log)
-    .pipe(gulp.dest('./app/styles'));
-});
 
-
-gulp.task('sass-main', function() {
-  return gulp.src('./scss/ionic.app.scss')
+gulp.task('sass', function() {
+  return gulp.src('./scss/app.scss')
     .pipe(plumber({
       errorHandler: onError
     }))
