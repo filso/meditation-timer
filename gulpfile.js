@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
   concat = require('gulp-concat'),
   sass = require('gulp-sass'),
+  connect = require('gulp-connect'),
   minifyCss = require('gulp-minify-css'),
   rename = require('gulp-rename'),
   karma = require('gulp-karma'),
@@ -14,11 +15,15 @@ var gulp = require('gulp'),
   jade = require('gulp-jade'),
   linker = require('gulp-linker'),
   runSequence = require('run-sequence'),
+  shell = require('gulp-shell'),
   livereload = require('gulp-livereload');
 
 
-var paths = {
+var onError = function (err) {  
+  gutil.beep();
+  console.log(err);
 };
+
 
 
 var paths = {
@@ -26,8 +31,8 @@ var paths = {
   scriptsWithoutTests: ['app/scripts/**/*.js', '!app/scripts/**/*_test.js'],
   images: 'app/images/**/*',
   templates: {
-    html: ['app/index.html', 'app/template/**/*.html', 'app/jade-output/**/*.html'],
-    jade: ['app/template/**/*.jade']
+    html: ['www/templates/**/*.html'],
+    jade: ['www/templates/**/*.jade']
   },
   sass: ['./scss/**/*.scss'],
   notLinted: ['!app/scripts/templates.js', '!app/scripts/services/BusuuPopcorn.js']
@@ -42,11 +47,17 @@ gulp.task('preprocess', ['templates', 'all-sass']);
 // The default task (called when you run `gulp` from cli)
 gulp.task('default', ['develop']);
 
-gulp.task('connect', connect.server({
-  root: ['app'],
-  port: 9000,
-  livereload: true
-}));
+gulp.task('connect', function() {
+  connect.server({
+    root: ['www'],
+    port: 9000,
+    livereload: true,
+    // open: {
+    //   browser: 'chrome' // if not working OS X browser: 'Google Chrome'
+    // },
+
+  })
+});
 
 
 gulp.task('hint', function() {
@@ -59,6 +70,16 @@ gulp.task('hint', function() {
 gulp.task('templates', ['jade', 'html2js']);
 
 
+
+// Rerun the task when a file changes
+gulp.task('watch', function() {
+  gulp.watch(paths.scripts, ['hint', 'watchJs']);
+  gulp.watch(paths.templates.html, ['html2js']);
+  gulp.watch(paths.templates.jade, ['templates']);
+  gulp.watch(paths.sass, ['sass']);
+});
+
+
 gulp.task('jade', function() {
   return gulp.src(paths.templates.jade)
     .pipe(plumber({
@@ -69,7 +90,7 @@ gulp.task('jade', function() {
       pretty: true,
       doctype: "html"
     }))
-    .pipe(gulp.dest("app/jade-output"));
+    .pipe(gulp.dest("www/templates"));
 });
 
 gulp.task('html2js', function() {
@@ -86,15 +107,15 @@ gulp.task('html2js', function() {
 
 
 gulp.task('linker', function() {
-  return gulp.src('app/index.html')
+  return gulp.src('www/index.html')
     .pipe(linker({
-      scripts: 'app/scripts/**/*.js',
+      scripts: 'www/js/**/*.js',
       startTag: '<!--SCRIPTS-->',
       endTag: '<!--SCRIPTS END-->',
       fileTmpl: '<script src="%s"></script>',
-      appRoot: 'app/'
+      appRoot: 'www/'
     }))
-    .pipe(gulp.dest('app/'));
+    .pipe(gulp.dest('www/'));
 });
 
 
@@ -124,8 +145,30 @@ gulp.task('sass-main', function() {
 
 
 
-gulp.task('watch', function() {
-  gulp.watch(paths.sass, ['sass']);
+gulp.task('karma', function() {
+  // https://github.com/lazd/gulp-karma/issues/9
+  return gulp.src(['./workaround'])
+    .pipe(karma({
+      configFile: 'test/karma.conf.js',
+      action: 'watch'
+    }))
+    .on('error', function(err) {
+      throw err;
+    });
 });
 
-gulp.task('default', ['sass']);
+gulp.task('single-test', function() {
+  return gulp.src(['./workaround'])
+    .pipe(karma({
+      configFile: 'test/karma.conf.js',
+      action: 'run'
+    }))
+    .on('error', function(err) {
+      throw err;
+    });
+
+});
+
+gulp.task('kill_karma', shell.task([
+  "kill -9 $(ps aux | awk '/[k]arma/ {print $2}')"
+]));
