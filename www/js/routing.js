@@ -12,6 +12,11 @@ angular.module('meditationTimer.routing')
         templateUrl: "templates/timer.html",
         controller: 'TimerCtrl'
       })
+      .state('session_builder', {
+        url: "/session_builder",
+        templateUrl: "templates/session_builder.html",
+        controller: 'SessionBuilderCtrl'
+      })
       .state('app.search', {
         url: "/search",
         views: {
@@ -47,5 +52,5 @@ angular.module('meditationTimer.routing')
         }
       });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/timer');
+    $urlRouterProvider.otherwise('/session_builder');
   });

@@ -1,0 +1,19 @@
+{
+  "name": "meditation-timer",
+  "version": "0.0.0",
+  "homepage": "https://github.com/filipsobczak/meditation-timer",
+  "authors": [
+    "Filip Sobczak <filsob@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lodash": "~2.4.1"
+  }
+}

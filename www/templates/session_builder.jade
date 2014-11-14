@@ -1,0 +1,20 @@
+.list
+  label.item.item-input
+    span.input-label Name
+    input(type='text')
+
+.list
+  div(ng-repeat='part in session.parts')
+    .item.icon-icon-left
+      i.icon.icon-email
+      | Ble
+
+.list
+  .item.item-input.item-select
+    .input-label
+      | lightsaber
+    select
+      option Silence
+      option(selected) Bells 
+      option Red
+    button.button(ng-click='addPart()') Add

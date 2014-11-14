@@ -1,11 +1,12 @@
 angular.module('meditationTimer.controllers')
   .controller('TimerCtrl', function($scope) {
+    'use strict';
 
     var targetLength = 600; // 10 minutes
     var startTime = new Date();
     var elapsed = 0;
 
-    function updateUI(seconds) {
+    function updateUI() {
       var seconds = targetLength - elapsed;
       $scope.minutes = Math.floor(seconds / 60);
       var s = seconds % 60;

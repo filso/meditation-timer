@@ -1,0 +1,37 @@
+{
+  "quotmark": false,
+  "globals": {
+    "console": false,
+    "$": false,
+    "angular": false,
+    "Zenbox": false,
+    "FB": false,
+    "_": false,
+    "_kmq": false,
+    "_gaq": false,
+    "trackEvent": false,
+    "require": false,
+    "swfobject": false,
+    "window": false,
+    "develop": false,
+
+    "describe": false,
+    "it": false,
+    "xit": false,
+    "before": false,
+    "beforeEach": false,
+    "after": false,
+    "afterEach": false,
+    "expect": false,
+    "xdescribe": false,
+    "jasmine": false,
+    "unused": true,
+
+    "module": false,
+    "inject": false,
+    "mockParams": false
+
+  },
+  "loopfunc": true,
+  "indent": 2
+}

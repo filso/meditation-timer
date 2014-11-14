@@ -20,13 +20,10 @@ var gulp = require('gulp'),
   gutil = require('gulp-util'),
   livereload = require('gulp-livereload');
 
-
 var onError = function (err) {  
   gutil.beep();
   console.log(err);
 };
-
-
 
 var paths = {
   scripts: ['app/scripts/**/*.js'],
@@ -40,11 +37,10 @@ var paths = {
   notLinted: ['!app/scripts/templates.js', '!app/scripts/services/BusuuPopcorn.js']
 };
 
-
 /**
  * Development tasks
  */
-gulp.task('develop', ['connect', 'preprocess', 'kill_karma', 'karma', 'watch']);
+gulp.task('develop', ['connect', 'preprocess', 'watch']);
 gulp.task('preprocess', ['jade', 'sass']);
 // The default task (called when you run `gulp` from cli)
 gulp.task('default', ['develop']);
@@ -53,12 +49,8 @@ gulp.task('connect', function() {
   connect.server({
     root: ['www'],
     port: 9000,
-    livereload: true,
-    // open: {
-    //   browser: 'chrome' // if not working OS X browser: 'Google Chrome'
-    // },
-
-  })
+    livereload: true
+  });
 });
 
 
